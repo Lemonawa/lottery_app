@@ -1,5 +1,6 @@
 #![cfg_attr(target_os = "windows", windows_subsystem = "windows")]
-use eframe::egui::{self, FontDefinitions, FontFamily, RichText, Layout, Align};
+
+use eframe::egui::{self, FontDefinitions, FontFamily, RichText, Layout, Align, TextStyle};
 use rand::seq::SliceRandom;
 use rand::thread_rng;
 
@@ -44,11 +45,20 @@ impl eframe::App for MyApp {
 
                 ui.horizontal(|ui| {
                     ui.label("请选择模式：");
-                    if ui.button("奖励").clicked() {
+                });
+
+                ui.add_space(20.0); // 添加一些空间
+
+                ui.horizontal(|ui| {
+                    let button_size = egui::vec2(150.0, 50.0); // 按钮尺寸
+                    let button_text = |text: &str| RichText::new(text).size(30.0); // 按钮文字大小
+
+                    if ui.add_sized(button_size, egui::Button::new(button_text("奖励"))).clicked() {
                         self.mode = "奖励".to_owned();
                         self.result = self.draw_lottery(&self.mode);
                     }
-                    if ui.button("惩罚").clicked() {
+                    ui.add_space(20.0); // 按钮之间的空间
+                    if ui.add_sized(button_size, egui::Button::new(button_text("惩罚"))).clicked() {
                         self.mode = "惩罚".to_owned();
                         self.result = self.draw_lottery(&self.mode);
                     }
@@ -56,8 +66,8 @@ impl eframe::App for MyApp {
 
                 ui.add_space(20.0); // 添加一些空间
 
-                ui.label(RichText::new(format!("当前模式：{}", self.mode)).heading());
-                ui.label(RichText::new(format!("抽奖结果：{}", self.result)).heading());
+                ui.label(RichText::new(format!("当前模式：{}", self.mode)).heading().size(25.0));
+                ui.label(RichText::new(format!("抽奖结果：{}", self.result)).heading().size(25.0));
             });
         });
     }
@@ -96,5 +106,11 @@ impl MyApp {
 
         // 设置文本样式
         ctx.set_fonts(fonts);
+
+        // 设置默认文本样式大小
+        let mut style = (*ctx.style()).clone();
+        style.text_styles.insert(TextStyle::Heading, egui::FontId::new(30.0, FontFamily::Proportional));
+        style.text_styles.insert(TextStyle::Body, egui::FontId::new(20.0, FontFamily::Proportional));
+        ctx.set_style(style);
     }
 }
