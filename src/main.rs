@@ -79,7 +79,7 @@ impl MyApp {
         // 使用相对路径加载字体文件
         fonts.font_data.insert(
             "my_font".to_owned(),
-            egui::FontData::from_static(include_bytes!("../assets/msyhbd.ttc")),
+            egui::FontData::from_static(include_bytes!("../assets/SourceHanSans-VF.ttf")),
         );
 
         // 设置字体族
