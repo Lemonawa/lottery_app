@@ -1,5 +1,5 @@
 #![cfg_attr(target_os = "windows", windows_subsystem = "windows")]
-use eframe::egui::{self, FontDefinitions, FontFamily, RichText, Layout, Align};
+use eframe::egui::{self, Align, FontDefinitions, FontFamily, Layout, RichText};
 use rand::seq::SliceRandom;
 use rand::thread_rng;
 
@@ -28,8 +28,26 @@ impl Default for MyApp {
         Self {
             mode: String::new(),
             result: String::new(),
-            rewards_pool: vec!["一杯果茶", "换电脑壁纸", "免跑操一次", "免一次惩罚", "一次不搞卫生","笔","棒棒糖","QQ糖"],
-            punishments_pool: vec!["自习课下课开合跳X10", "帮六科课代表搬作业各一次", "倒一星期垃圾", "外出上课最后走（关电器）", "讲台上开合跳X20", "大象转圈X20", "当一个星期一体机壁纸", "高歌一曲 or 才艺表演"],
+            rewards_pool: vec![
+                "一杯果茶",
+                "换电脑壁纸",
+                "免跑操一次",
+                "免一次惩罚",
+                "一次不搞卫生",
+                "笔",
+                "棒棒糖",
+                "QQ糖",
+            ],
+            punishments_pool: vec![
+                "自习课下课开合跳X10",
+                "帮六科课代表搬作业各一次",
+                "倒一星期垃圾",
+                "外出上课最后走（关电器）",
+                "讲台上开合跳X20",
+                "大象转圈X20",
+                "当一个星期一体机壁纸",
+                "高歌一曲 or 才艺表演",
+            ],
         }
     }
 }
@@ -47,14 +65,20 @@ impl eframe::App for MyApp {
 
                     ui.add_space(10.0); // Add some space
 
-                    if ui.add_sized([120.0, 50.0], egui::Button::new("奖励")).clicked() {
+                    if ui
+                        .add_sized([120.0, 50.0], egui::Button::new("奖励"))
+                        .clicked()
+                    {
                         self.mode = "奖励".to_owned();
                         self.result = self.draw_lottery(&self.mode);
                     }
 
                     ui.add_space(10.0); // Add some space
 
-                    if ui.add_sized([120.0, 50.0], egui::Button::new("惩罚")).clicked() {
+                    if ui
+                        .add_sized([120.0, 50.0], egui::Button::new("惩罚"))
+                        .clicked()
+                    {
                         self.mode = "惩罚".to_owned();
                         self.result = self.draw_lottery(&self.mode);
                     }
@@ -73,8 +97,16 @@ impl MyApp {
     fn draw_lottery(&self, mode: &str) -> String {
         let mut rng = thread_rng();
         match mode {
-            "奖励" => self.rewards_pool.choose(&mut rng).unwrap_or(&"无效的模式").to_string(),
-            "惩罚" => self.punishments_pool.choose(&mut rng).unwrap_or(&"无效的模式").to_string(),
+            "奖励" => self
+                .rewards_pool
+                .choose(&mut rng)
+                .unwrap_or(&"无效的模式")
+                .to_string(),
+            "惩罚" => self
+                .punishments_pool
+                .choose(&mut rng)
+                .unwrap_or(&"无效的模式")
+                .to_string(),
             _ => "无效的模式，请选择‘奖励’或‘惩罚’。".to_string(),
         }
     }
