@@ -40,21 +40,27 @@ impl eframe::App for MyApp {
             ui.with_layout(Layout::top_down(Align::Center), |ui| {
                 ui.heading("奖励还是惩罚？");
 
-                ui.add_space(20.0); // 添加一些空间
+                ui.add_space(20.0); // Add some space
 
-                ui.horizontal(|ui| {
+                ui.vertical_centered(|ui| {
                     ui.label("请选择模式：");
-                    if ui.button("奖励").clicked() {
+
+                    ui.add_space(10.0); // Add some space
+
+                    if ui.add_sized([120.0, 50.0], egui::Button::new("奖励")).clicked() {
                         self.mode = "奖励".to_owned();
                         self.result = self.draw_lottery(&self.mode);
                     }
-                    if ui.button("惩罚").clicked() {
+
+                    ui.add_space(10.0); // Add some space
+
+                    if ui.add_sized([120.0, 50.0], egui::Button::new("惩罚")).clicked() {
                         self.mode = "惩罚".to_owned();
                         self.result = self.draw_lottery(&self.mode);
                     }
                 });
 
-                ui.add_space(20.0); // 添加一些空间
+                ui.add_space(20.0); // Add some space
 
                 ui.label(RichText::new(format!("当前模式：{}", self.mode)).heading());
                 ui.label(RichText::new(format!("抽奖结果：{}", self.result)).heading());
@@ -76,13 +82,13 @@ impl MyApp {
     fn setup_fonts(&self, ctx: &egui::Context) {
         let mut fonts = FontDefinitions::default();
 
-        // 使用相对路径加载字体文件
+        // Load the font file using a relative path
         fonts.font_data.insert(
             "my_font".to_owned(),
             egui::FontData::from_static(include_bytes!("../assets/SourceHanSansCN-VF.otf")),
         );
 
-        // 设置字体族
+        // Set font family
         fonts
             .families
             .get_mut(&FontFamily::Proportional)
@@ -94,7 +100,7 @@ impl MyApp {
             .unwrap()
             .push("my_font".to_owned());
 
-        // 设置文本样式
+        // Set text styles
         ctx.set_fonts(fonts);
     }
 }
